@@ -5,6 +5,9 @@ An AI-powered Placement Prediction and Career Guidance System built using **Reac
 The application predicts a student's placement probability based on academic and skill-related metrics and generates personalized AI-powered career guidance.
 
 ---
+Live Demo: https://placetector.vercel.app
+
+Backend API: https://placetector.onrender.com
 
 # 🌟 Features
 
