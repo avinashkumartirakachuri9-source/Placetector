@@ -121,7 +121,7 @@ useEffect(() => {
     setLoading(true);
 
     const res = await axios.post(
-      "http://placetector.onrender.com/predict",
+      "https://placetector.onrender.com/predict",
       form
     );
 
