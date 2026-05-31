@@ -34,15 +34,12 @@ The application predicts a student's placement probability based on academic and
 
 ## Home Page
 
-> Add screenshot here
-
 ![Home Page](screenshots/Home.png)
 
 ---
 
 ## Placement Prediction Result
 
-> Add screenshot here
 
 ![Prediction Result](screenshots/details.png)
 
@@ -50,23 +47,16 @@ The application predicts a student's placement probability based on academic and
 
 ## AI Career Analysis
 
-> Add screenshot here
-
 ![AI Analysis](screenshots/Ai_Analysis.png)
 
 ---
 
 ## Prediction History
-
-> Add screenshot here
-
 ![History](screenshots/history.png)
 
 ---
 
 ## PDF Report Download
-
-> Add screenshot here
 
 ![PDF Report](screenshots/download.png)
 
