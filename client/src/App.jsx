@@ -9,7 +9,7 @@ function App() {
   try {
 
     await axios.delete(
-      `http://127.0.0.1:5000/delete/${id}`
+      `https://placetector.onrender.com//delete/${id}`
     );
 
     loadHistory();
@@ -40,7 +40,7 @@ function App() {
   try {
 
     const response = await axios.post(
-      "http://127.0.0.1:5000/report",
+      "https://placetector.onrender.com/report",
       {
         name: form.name,
         probability: result.probability,
@@ -88,7 +88,7 @@ function App() {
   const loadHistory = async () => {
   try {
     const res = await axios.get(
-      "http://127.0.0.1:5000/history"
+      "https://placetector.onrender.com//history"
     );
 
     setHistory(res.data);
