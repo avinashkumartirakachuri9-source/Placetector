@@ -3,7 +3,13 @@ from flask_cors import CORS
 import joblib
 import os
 from dotenv import load_dotenv
+
+
 from google import genai
+from google.oauth2 import id_token
+from google.auth.transport import requests
+
+
 
 from bson import ObjectId
 
@@ -31,6 +37,8 @@ mongo_client = MongoClient(
 db = mongo_client["placement_predictor"]
 
 predictions_collection = db["predictions"]
+users_collection = db["users"]
+
 app = Flask(__name__)
 CORS(app)
 
@@ -134,7 +142,7 @@ def history():
 
     records = list(
         predictions_collection
-        .find()
+        .find({})
         .sort("created_at", -1)
         .limit(10)
     )
@@ -221,5 +229,39 @@ def report():
         as_attachment=True
     )
 
+@app.route("/google-login", methods=["POST"])
+def google_login():
+
+    token = request.json["credential"]
+
+    info = id_token.verify_oauth2_token(
+        token,
+        requests.Request(),
+        "997210386530-s4v29pj8pk7k80ovq8uchh7j4pk2io36.apps.googleusercontent.com"
+    )
+
+    email = info["email"]
+    name = info["name"]
+
+    user = users_collection.find_one({
+        "email": email
+    })
+
+    if not user:
+
+        users_collection.insert_one({
+            "email": email,
+            "name": name
+        })
+
+    return jsonify({
+        "user": {
+            "email": email,
+            "name": name
+        }
+    })
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(
+        host="0.0.0.0",
+        debug=True
+    )

@@ -3,22 +3,23 @@ import axios from "axios";
 import "./App.css";
 
 
+
+
 function App() {
 
-  const deletePrediction = async (id) => {
-  try {
+  const deletePrediction = (index) => {
 
-    await axios.delete(
-      `https://placetector.onrender.com//delete/${id}`
+  const updatedHistory =
+    history.filter(
+      (_, i) => i !== index
     );
 
-    loadHistory();
+  setHistory(updatedHistory);
 
-  } catch (err) {
-
-    console.log(err);
-
-  }
+  localStorage.setItem(
+    "history",
+    JSON.stringify(updatedHistory)
+  );
 };
 
   const [form, setForm] = useState({
@@ -35,7 +36,10 @@ function App() {
   });
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState(
+    JSON.parse(localStorage.getItem("history")) || []
+  );
+
   const downloadReport = async () => {
   try {
 
@@ -78,28 +82,13 @@ function App() {
   }
 };
 
+
   const handleChange = (e) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
   };
-
-  const loadHistory = async () => {
-  try {
-    const res = await axios.get(
-      "https://placetector.onrender.com//history"
-    );
-
-    setHistory(res.data);
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-useEffect(() => {
-  loadHistory();
-}, []);
 
  const predict = async () => {
   if (
@@ -126,7 +115,27 @@ useEffect(() => {
     );
 
     setResult(res.data);
-    loadHistory();
+
+const newPrediction = {
+  name: form.name,
+  probability: res.data.probability,
+  prediction:
+    res.data.prediction === 1
+      ? "Likely Placed"
+      : "Not Likely Placed",
+};
+
+const updatedHistory = [
+  newPrediction,
+  ...history,
+].slice(0, 10);
+
+setHistory(updatedHistory);
+
+localStorage.setItem(
+  "history",
+  JSON.stringify(updatedHistory)
+);
 
   } catch (err) {
 
@@ -145,6 +154,13 @@ useEffect(() => {
       <div className="card">
 
         <h1>🚀 AI Placement Predictor</h1>
+
+        {/* <GoogleLogin
+          onSuccess={handleGoogleLogin}
+          onError={() => console.log("Login Failed")}
+        /> */}
+
+        <br />
 
         <div className="form-grid">
 
@@ -313,8 +329,8 @@ useEffect(() => {
 
   <button
     onClick={() =>
-      deletePrediction(item._id)
-    }
+  deletePrediction(index)
+}
   >
     ❌ Delete
   </button>
